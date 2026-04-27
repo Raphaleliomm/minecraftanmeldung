@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-id="th-modified">KMG Schulserver</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:   #1a3a6b;
+      --orange: #e87722;
+      --green:  #2e7d32;
+      --light:  #f5f7fa;
+      --border: #dde1e9;
+      --text:   #1a1a2e;
+      --muted:  #5a6378;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Nunito', sans-serif; background: var(--light); color: var(--text); }
+
+    nav {
+      background: #fff; border-bottom: 3px solid var(--blue);
+      padding: .85rem 2.5rem; display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    }
+    .nav-logo img { height: 44px; display: block; }
+    .nav-links { display: flex; gap: .3rem; }
+    .nav-links a {
+      font-weight: 800; font-size: .88rem; color: var(--blue);
+      text-decoration: none; padding: .4rem .9rem; border-radius: 6px; transition: background .15s, color .15s;
+    }
+    .nav-links a:hover { background: var(--blue); color: #fff; }
+
+    #hero {
+      background: var(--blue); padding: 4.5rem 2rem 4rem;
+      text-align: center; border-bottom: 4px solid var(--orange);
+    }
+    #hero img.hero-logo { height: 90px; margin-bottom: 1.8rem; filter: brightness(0) invert(1); }
+    #hero h1 { font-size: clamp(1.8rem,5vw,3rem); font-weight: 900; color: #fff; margin-bottom: .7rem; letter-spacing: -.5px; }
+    #hero h1 span { color: var(--orange); }
+    #hero p { font-size: 1.05rem; color: rgba(255,255,255,.8); max-width: 540px; margin: 0 auto 2.2rem; line-height: 1.7; }
+    .btn { display: inline-block; font-weight: 800; font-size: .95rem; padding: .75rem 2rem; border-radius: 8px; text-decoration: none; border: 2px solid transparent; transition: all .15s; }
+    .btn-primary { background: var(--orange); color: #fff; border-color: var(--orange); }
+    .btn-primary:hover { background: #cf6510; border-color: #cf6510; }
+    .btn-outline { background: transparent; color: #fff; border-color: rgba(255,255,255,.5); margin-left: .8rem; }
+    .btn-outline:hover { background: rgba(255,255,255,.1); }
+
+    section { padding: 4rem 2rem; }
+    .wrap { max-width: 980px; margin: 0 auto; }
+    h2 { font-size: 1.6rem; font-weight: 900; color: var(--blue); margin-bottom: 1.6rem; padding-bottom: .6rem; border-bottom: 3px solid var(--orange); display: inline-block; }
+
+    #about { background: #fff; border-bottom: 1px solid var(--border); }
+    .about-intro { font-size: 1.05rem; line-height: 1.8; color: var(--muted); max-width: 720px; margin-bottom: 2rem; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px,1fr)); gap: 1.2rem; }
+    .card { border: 2px solid var(--border); border-radius: 12px; padding: 1.5rem 1.3rem; background: var(--light); border-top: 4px solid var(--blue); transition: transform .15s, box-shadow .15s; }
+    .card:nth-child(2){border-top-color:var(--orange)} .card:nth-child(3){border-top-color:var(--green)} .card:nth-child(4){border-top-color:#7b1fa2}
+    .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.09); }
+    .card h3 { font-size: .97rem; font-weight: 900; margin-bottom: .5rem; }
+    .card p  { font-size: .88rem; color: var(--muted); line-height: 1.6; }
+
+    #rules { background: var(--light); border-bottom: 1px solid var(--border); }
+    .rule-tabs { display: flex; gap: .5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .rtab { font-weight: 800; font-size: .85rem; padding: .45rem 1.1rem; border: 2px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; color: var(--muted); transition: all .15s; }
+    .rtab.on { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .rtab:hover:not(.on) { border-color: var(--blue); color: var(--blue); }
+    .rpanel { display: none; } .rpanel.on { display: block; }
+    .rule-item { display: flex; align-items: flex-start; gap: .9rem; padding: .9rem 1.1rem; margin-bottom: .6rem; background: #fff; border: 1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 8px; font-size: .93rem; line-height: 1.6; }
+    .rule-item.orange{border-left-color:var(--orange)} .rule-item.green{border-left-color:var(--green)} .rule-item.red{border-left-color:#c62828}
+    .rule-num { font-weight: 900; font-size: .8rem; color: var(--blue); background: #e8eef7; padding: .2rem .5rem; border-radius: 4px; flex-shrink: 0; margin-top: 1px; }
+
+    #anmeldung { background: #fff; border-bottom: 1px solid var(--border); }
+    .form-box { background: var(--light); border: 1px solid var(--border); border-radius: 14px; padding: 2.2rem 2rem; max-width: 640px; border-top: 4px solid var(--blue); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+    .field { display: flex; flex-direction: column; gap: .35rem; }
+    .field.full { grid-column: 1/-1; }
+    .field label { font-size: .78rem; font-weight: 900; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); }
+    .field input { border: 2px solid var(--border); border-radius: 8px; padding: .65rem .9rem; font-family: 'Nunito', sans-serif; font-size: .95rem; outline: none; background: #fff; transition: border .2s, box-shadow .2s; }
+    .field input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(26,58,107,.1); }
+    .agb-row { display: flex; align-items: flex-start; gap: .7rem; margin: 1.2rem 0; font-size: .9rem; color: var(--muted); line-height: 1.5; }
+    .agb-row input { width: 16px; height: 16px; margin-top: 3px; flex-shrink: 0; accent-color: var(--blue); }
+    .agb-row a { color: var(--blue); font-weight: 800; }
+    .submit-btn { font-weight: 900; font-size: .95rem; padding: .8rem 2rem; background: var(--blue); color: #fff; border: none; border-radius: 8px; cursor: pointer; transition: background .15s; }
+    .submit-btn:hover { background: #122d55; }
+    .submit-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+    .form-state { display: none; text-align: center; padding: 2.5rem 1rem; }
+    .form-state.active { display: block; }
+    .form-state .icon { font-size: 2.5rem; margin-bottom: .8rem; }
+    .form-state h3 { font-size: 1.2rem; font-weight: 900; margin-bottom: .5rem; }
+    .form-state p { color: var(--muted); line-height: 1.6; }
+    .state-success h3 { color: var(--green); }
+    .state-error h3 { color: #c62828; }
+
+    .overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,.55); align-items: center; justify-content: center; padding: 1rem; }
+    .overlay.open { display: flex; }
+    .modal { background: #fff; border-radius: 14px; border-top: 4px solid var(--blue); max-width: 680px; width: 100%; max-height: 82vh; overflow-y: auto; padding: 2rem; box-shadow: 0 20px 60px rgba(0,0,0,.2); }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .modal-head h2 { font-size: 1.25rem; border: none; padding: 0; margin: 0; }
+    .close-btn { font-weight: 900; font-size: .82rem; background: #f1f1f1; color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: .3rem .8rem; cursor: pointer; }
+    .close-btn:hover { background: #e0e0e0; }
+    .modal h3 { font-size: .95rem; font-weight: 900; color: var(--blue); margin: 1.2rem 0 .4rem; }
+    .modal p, .modal li { font-size: .9rem; color: var(--muted); line-height: 1.8; }
+    .modal ul { padding-left: 1.3rem; }
+
+    #support { background: var(--light); }
+    .support-card { max-width: 460px; background: #fff; border: 1px solid var(--border); border-radius: 12px; border-top: 4px solid var(--orange); padding: 2.2rem 2rem; box-shadow: 0 4px 16px rgba(0,0,0,.06); }
+    .support-card h3 { font-size: 1.1rem; font-weight: 900; margin-bottom: .6rem; }
+    .support-card p { font-size: .93rem; color: var(--muted); margin-bottom: 1.4rem; line-height: 1.6; }
+    .mail-btn { display: inline-block; font-weight: 800; font-size: .9rem; background: var(--blue); color: #fff; border-radius: 8px; padding: .65rem 1.4rem; text-decoration: none; transition: background .15s; }
+    .mail-btn:hover { background: #122d55; }
+
+    footer { background: var(--blue); color: rgba(255,255,255,.6); text-align: center; padding: 1.5rem; font-size: .82rem; font-weight: 700; }
+    footer span { color: #fff; }
+
+    @media(max-width:600px){ .form-grid{grid-template-columns:1fr} .nav-links{display:none} .btn-outline{display:none} }
+  </style>
+<meta property="og:title" content="KMG Schulserver" data-id="th-modified" ><meta property="og:image" content="https://tiiny.host/assets/logo-purple-bg.png" data-id="th-modified" ><meta property="og:url" content="https://minecraft-kmg.tiiny.site/" data-id="th-modified" ><meta property="og:type" content="website" data-id="th-modified" ><script defer data-domain="minecraft-kmg.tiiny.site" src="https://analytics.tiiny.site/js/plausible.js"></script><script type="text/javascript" src="https://tiiny.host/ad-script.js"></script></head>
+<body>
+
+<nav>
+  <div class="nav-logo"><img src="logo.png" alt="Karl Maybach Gymnasium"></div>
+  <div class="nav-links">
+    <a href="#about">Uber den Server</a>
+    <a href="#rules">Regeln</a>
+    <a href="#anmeldung">Anmeldung</a>
+    <a href="#support">Support</a>
+  </div>
+</nav>
+
+<section id="hero">
+  <img src="logo.png" alt="KMG Logo" class="hero-logo">
+  <h1>Willkommen auf dem<br><span>KMG Schulserver</span></h1>
+  <p>Entdecke, baue und spiele mit deinen Klassenkameraden auf unserem Minecraft-Server. Hier lernst du spielerisch und kreativ.</p>
+  <a href="#anmeldung" class="btn btn-primary">Jetzt anmelden</a>
+  <a href="#rules" class="btn btn-outline">Regeln lesen</a>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <h2>Uber den Server</h2>
+    <p class="about-intro">Der KMG Schulserver ist ein sicherer, pädagogischer Minecraft-Server für Schülerinnen und Schüler unserer Schule. Er fördert Kreativität, Teamarbeit und Lernen durch Spiel. Der Server läuft auf der neuesten Minecraft-Version und bietet verschiedene Welten für unterschiedliche Aktivitäten.</p>
+    <div class="card-grid">
+      <div class="card"><h3>Sicheres Umfeld</h3><p>Nur Schülerinnen und Schüler der KMG dürfen mitspielen. Jeder Zugang wird manuell geprüft.</p></div>
+      <div class="card"><h3>Kreativität fördern</h3><p>Verschiedene Welten für Bauprojekte, Quests und freies Erkunden — ohne Leistungsdruck.</p></div>
+      <div class="card"><h3>Teamarbeit</h3><p>Gemeinsam planen, bauen und Probleme lösen — wichtige Fähigkeiten fürs echte Leben.</p></div>
+      <div class="card"><h3>Lernprojekte</h3><p>Der Server wird auch für schulische Projekte genutzt — Geschichte, Architektur und mehr.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="rules">
+  <div class="wrap">
+    <h2>Server-Regeln</h2>
+    <div class="rule-tabs">
+      <button class="rtab on" onclick="tab('allg',this)">Allgemeine Regeln</button>
+      <button class="rtab" onclick="tab('mc',this)">Minecraft-Regeln</button>
+      <button class="rtab" onclick="tab('folg',this)">Konsequenzen</button>
+    </div>
+    <div class="rpanel on" id="p-allg">
+      <div class="rule-item"><span class="rule-num">1</span>Behandle alle Spieler mit Respekt und Höflichkeit.</div>
+      <div class="rule-item"><span class="rule-num">2</span>Beleidigungen, Hassreden und diskriminierende Äußerungen sind strengstens verboten.</div>
+      <div class="rule-item"><span class="rule-num">3</span>Kein Spam, keine Werbung oder unerwünschte Nachrichten im Chat.</div>
+      <div class="rule-item"><span class="rule-num">4</span>Keine Betrugsversuche gegenüber anderen Spielern.</div>
+    </div>
+    <div class="rpanel" id="p-mc">
+      <div class="rule-item orange"><span class="rule-num">1</span><strong>Kein Griefing</strong> — keine Zerstörung oder Beschädigung von Bauten anderer Spieler.</div>
+      <div class="rule-item orange"><span class="rule-num">2</span>Nicht aus Truhen oder dem Inventar anderer Spieler stehlen.</div>
+      <div class="rule-item orange"><span class="rule-num">3</span><strong>Keine Cheats, Hacks oder unerlaubten Modifikationen</strong> jeglicher Art.</div>
+      <div class="rule-item orange"><span class="rule-num">4</span>Serverbugs nicht ausnutzen — direkt dem Support-Team melden.</div>
+    </div>
+    <div class="rpanel" id="p-folg">
+      <div class="rule-item green"><span class="rule-num" style="background:#e8f5e9;color:#2e7d32">Leicht</span>Mündliche oder schriftliche Verwarnung, ggf. Wiedergutmachung (z.B. Wiederaufbau zerstörter Bereiche).</div>
+      <div class="rule-item orange"><span class="rule-num" style="background:#fff3e0;color:#e65100">Mittel</span>Temporäre Sperre (1–7 Tage), Elterninformation, pädagogische Maßnahme (z.B. IT-Sicherheits-Workshop).</div>
+      <div class="rule-item red"><span class="rule-num" style="background:#ffebee;color:#c62828">Schwer</span>Dauerhafte Sperre, schulische Ordnungsmaßnahmen, Benachrichtigung der Eltern und ggf. Schulleitung.</div>
+      <div class="rule-item red"><span class="rule-num" style="background:#ffebee;color:#c62828">Sehr schwer</span>Schulische Disziplinarmaßnahmen bis hin zur Strafanzeige gemäß §303b StGB (Computerkriminalität).</div>
+    </div>
+  </div>
+</section>
+
+<section id="anmeldung">
+  <div class="wrap">
+    <h2>Anmeldung</h2>
+    <p style="color:var(--muted);margin-bottom:1.5rem;max-width:580px;line-height:1.7;">
+      Um Zugang zum Server zu erhalten, fülle bitte das folgende Formular aus. Du benötigst eine gültige E-Mail-Adresse und deinen Minecraft-Benutzernamen.
+    </p>
+    <div class="form-box">
+
+      <!-- Formular -->
+      <div id="stateForm">
+        <div class="form-grid">
+          <div class="field"><label>Vorname</label><input type="text" id="vorname" placeholder="Vorname"></div>
+          <div class="field"><label>Nachname</label><input type="text" id="nachname" placeholder="Nachname"></div>
+          <div class="field"><label>Klasse</label><input type="text" id="klasse" placeholder="z.B. 7b"></div>
+          <div class="field"><label>Klassenlehrer/in</label><input type="text" id="lehrer" placeholder="Name der Lehrkraft"></div>
+          <div class="field full"><label>E-Mail-Adresse</label><input type="email" id="email" placeholder="vorname.nachname@schulserver.de"></div>
+          <div class="field full"><label>Minecraft-Benutzername</label><input type="text" id="mcname" placeholder="Exakter Spielername"></div>
+        </div>
+        <label class="agb-row">
+          <input type="checkbox" id="agbCheck">
+          <span>Ich habe die <a href="#" onclick="openModal(event)">Nutzungsbedingungen (AGB)</a> gelesen und akzeptiere sie.</span>
+        </label>
+        <button class="submit-btn" id="submitBtn" onclick="absenden()">Anmeldung absenden</button>
+      </div>
+
+      <!-- Erfolgsmeldung -->
+      <div class="form-state state-success" id="stateSuccess">
+        <div class="icon">&#10003;</div>
+        <h3>Anmeldung erhalten!</h3>
+        <p>Deine Anmeldung wurde erfolgreich übermittelt. Wir prüfen deinen Antrag und melden uns in Kürze per E-Mail bei dir.</p>
+      </div>
+
+      <!-- Fehlermeldung -->
+      <div class="form-state state-error" id="stateError">
+        <div class="icon">&#9888;</div>
+        <h3>Fehler beim Senden</h3>
+        <p id="errorMsg">Es ist ein Fehler aufgetreten. Bitte versuche es erneut oder schreibe uns direkt an KMGServerSupport@proton.me.</p>
+        <br>
+        <button class="submit-btn" onclick="resetForm()">Erneut versuchen</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- AGB Modal -->
+<div class="overlay" id="modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Nutzungsbedingungen (AGB)</h2>
+      <button class="close-btn" onclick="closeModal()">Schließen</button>
+    </div>
+    <p><strong>Stand: November 2025</strong></p>
+    <h3>1. Geltungsbereich</h3>
+    <p>Diese Nutzungsbedingungen gelten für alle Nutzerinnen und Nutzer des KMG Schulservers sowie der dazugehörigen Webangebote. Mit der Anmeldung und Nutzung des Servers werden diese Bedingungen akzeptiert.</p>
+    <h3>2. Zweck des Servers</h3>
+    <p>Der KMG Schulserver dient ausschließlich pädagogischen und schulischen Zwecken. Er soll Kreativität, Teamarbeit und digitales Lernen durch die Nutzung des Spiels Minecraft fördern. Eine kommerzielle oder missbräuchliche Nutzung ist untersagt.</p>
+    <h3>3. Registrierung und Zugang</h3>
+    <ul>
+      <li>Die Teilnahme ist nur für Schülerinnen, Schüler und Lehrkräfte der KMG Schule erlaubt.</li>
+      <li>Für die Registrierung ist eine gültige E-Mail-Adresse erforderlich.</li>
+      <li>Zugangsdaten dürfen nicht an Dritte weitergegeben werden.</li>
+      <li>Der Betreiber kann Anträge ablehnen oder den Zugang entziehen, wenn Regelverstöße vorliegen.</li>
+    </ul>
+    <h3>4. Verhalten auf dem Server</h3>
+    <ul>
+      <li>Respektiere andere Spielerinnen und Spieler — kein Mobbing, keine Beleidigungen oder Diskriminierungen.</li>
+      <li>Kein Spam, keine Werbung, keine ungewollten Nachrichten.</li>
+      <li>Kein Griefing — keine absichtliche Zerstörung fremder Bauten oder Eigentum.</li>
+      <li>Keine Verwendung von Cheats, Hacks oder unerlaubten Modifikationen.</li>
+      <li>Kein Diebstahl, keine Ausnutzung von Serverfehlern oder Sicherheitslücken.</li>
+    </ul>
+    <h3>5. Konsequenzen bei Regelverstößen</h3>
+    <p><strong>Leichte Verstöße:</strong> Mündliche oder schriftliche Verwarnung, Wiedergutmachung.</p>
+    <p><strong>Mittlere Verstöße:</strong> Temporäre Sperre (1–7 Tage), Elterninformation, pädagogische Maßnahme.</p>
+    <p><strong>Schwere Verstöße:</strong> Dauerhafte Sperre, schulische Ordnungsmaßnahmen, Benachrichtigung der Eltern und ggf. der Schulleitung.</p>
+    <p><strong>Sehr schwere Verstöße</strong> (z.B. Hacking, Sabotage): Schulische Disziplinarmaßnahmen bis hin zu Anzeige gemäß §303b StGB.</p>
+    <h3>6. Datenschutz</h3>
+    <p>Bei der Anmeldung werden folgende Daten erhoben: Vorname, Nachname, Klasse, E-Mail, Minecraft-Name und Klassenlehrer/in. Diese Daten werden ausschließlich zur Verwaltung des Serverzugangs verwendet. Eine Weitergabe an Dritte erfolgt nicht. Kontakt: KMGServerSupport@proton.me</p>
+    <h3>7. Haftung</h3>
+    <p>Die Nutzung des Servers erfolgt auf eigene Verantwortung. Der Betreiber übernimmt keine Haftung für technische Störungen oder Datenverluste.</p>
+    <h3>8. Urheberrecht</h3>
+    <p>Die im Spiel erstellten Inhalte dürfen von der Schule zu pädagogischen Zwecken genutzt werden. Die Rechte am Spiel Minecraft liegen bei Mojang/Microsoft.</p>
+    <h3>9. Änderungen der Nutzungsbedingungen</h3>
+    <p>Der Betreiber behält sich vor, diese Bedingungen bei Bedarf anzupassen. Nutzerinnen und Nutzer werden über Änderungen rechtzeitig informiert.</p>
+    <h3>10. Kontakt</h3>
+    <p>Bei Fragen oder Problemen: KMGServerSupport@proton.me</p>
+  </div>
+</div>
+
+<section id="support">
+  <div class="wrap">
+    <h2>Support</h2>
+    <div class="support-card">
+      <h3>Fragen oder Probleme?</h3>
+      <p>Hast du Fragen zur Anmeldung, technische Probleme oder benötigst du Hilfe auf dem Server? Unser Support-Team hilft dir gerne weiter.</p>
+      <a href="mailto:KMGServerSupport@proton.me" class="mail-btn">KMGServerSupport@proton.me</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><span>Karl Maybach Gymnasium</span> &mdash; KMG Schulserver &copy; 2025</p>
+</footer>
+
+<script>
+  // ACHTUNG: Neue Web-App-URL
+  const FORMSPREE_URL = 'https://script.google.com/macros/s/AKfycbzaXjQUxbLp1IVQhpasWR5agfeXfkByJaplXEWH0RMpaoE5RQ_-BeQj2yJboU1okUpu5Q/exec';
+
+  function tab(id, btn) {
+    document.querySelectorAll('.rpanel').forEach(p => p.classList.remove('on'));
+    document.querySelectorAll('.rtab').forEach(b => b.classList.remove('on'));
+    document.getElementById('p-' + id).classList.add('on');
+    btn.classList.add('on');
+  }
+
+  function openModal(e) { e.preventDefault(); document.getElementById('modal').classList.add('open'); }
+  function closeModal() { document.getElementById('modal').classList.remove('open'); }
+  document.getElementById('modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+  function showState(id) {
+    ['stateForm','stateSuccess','stateError'].forEach(s => {
+      const el = document.getElementById(s);
+      if (s === id) el.style.display = 'block';
+      else { el.style.display = ''; el.classList.remove('active'); }
+    });
+    if (id !== 'stateForm') document.getElementById(id).classList.add('active');
+  }
+
+  function resetForm() {
+    document.getElementById('submitBtn').disabled = false;
+    showState('stateForm');
+  }
+
+  async function absenden() {
+    const vorname = document.getElementById('vorname').value.trim();
+    const nachname= document.getElementById('nachname').value.trim();
+    const klasse  = document.getElementById('klasse').value.trim();
+    const lehrer  = document.getElementById('lehrer').value.trim();
+    const email   = document.getElementById('email').value.trim();
+    const mcname  = document.getElementById('mcname').value.trim();
+
+    if (!vorname||!nachname||!klasse||!lehrer||!email||!mcname) {
+      alert('Bitte alle Felder ausfüllen.'); return;
+    }
+    if (!document.getElementById('agbCheck').checked) {
+      alert('Bitte akzeptiere die Nutzungsbedingungen.'); return;
+    }
+
+    // KEINE Prüfung der E-Mail-Endung mehr – alle Adressen sind erlaubt
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Wird gesendet...';
+
+    try {
+      const res = await fetch(FORMSPREE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain', 'Accept': 'application/json' },
+        body: JSON.stringify({ vorname, nachname, klasse, lehrer, email, mcname })
+      });
+
+      if (res.ok) {
+        document.getElementById('stateForm').style.display = 'none';
+        document.getElementById('stateSuccess').classList.add('active');
+      } else {
+        const data = await res.json();
+        document.getElementById('errorMsg').textContent = data.error || 'Unbekannter Fehler. Bitte direkt eine Mail an KMGServerSupport@proton.me schicken.';
+        document.getElementById('stateForm').style.display = 'none';
+        document.getElementById('stateError').classList.add('active');
+        btn.disabled = false;
+        btn.textContent = 'Anmeldung absenden';
+      }
+    } catch(err) {
+      document.getElementById('errorMsg').textContent = 'Netzwerkfehler: ' + err.message;
+      document.getElementById('stateForm').style.display = 'none';
+      document.getElementById('stateError').classList.add('active');
+      btn.disabled = false;
+      btn.textContent = 'Anmeldung absenden';
+    }
+  }
+</script>
+</body>
+</html>
